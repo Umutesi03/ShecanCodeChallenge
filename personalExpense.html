@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal expenses traker</title>
+    <style>
+    .left{
+    width: 30vw;
+    background-color: rgb(33, 31, 31);
+    height: 100vh;
+}
+.right{
+    width: 70vw;
+}
+.container{
+display: flex;
+flex-direction: row;
+}
+input, select{
+    width: 90%;
+    background-color: white;
+    height: 7%;
+    margin-bottom: 30px;
+    
+}
+
+label{
+    color: white;
+    font-weight: bold;
+    
+}
+
+form{
+    background-color: rgb(62, 61, 61);
+    height: 70%;
+    width: 90%;
+    margin: auto;
+}
+
+button{
+    background-color: green;
+    padding: 7px 10px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 10px;
+    color: white;
+}
+table{
+    margin: auto;
+}
+
+h1{
+    text-align: center;
+}
+    </style>
+</head>
+<body>
+    <main>
+    <h1>Personal expenses Tracker</h1>
+    <div class="container">
+    <div class="left">
+    <form>
+        <label>Expense Description
+            <input type="text" id="expense" placeholder="Enter the expesnes">
+        </label>
+        
+        <label >Enter amount you spent
+            <input type="number" id="amount" placeholder="Enter amount">
+        </label>
+        
+        <label >Choose category of expenses
+
+            <select id="category">
+                <option>Food</option>
+                <option>Transport</option>
+                <option>Entertainment</option>
+                <option>Family and friends</option>
+            </select>
+        </label>
+        
+       <label >Choose Date
+        <input type="date" id="date">
+       </label>
+
+       
+        <button id="submit">Add expense</button>
+    </form>
+</div>
+
+    <div class="right">
+    <table id="table">
+     <tr>
+        <th>Expense Description</th>
+        <th>amaunt spent</th>
+        <th>expense Category</th>
+        <th>Date</th>
+        <th>Edit expense</th>
+        <th>Delete Expense</th>
+     </tr>
+    </table>
+</div>
+</div>
+</main>
+
+<script>
+   
+   let submit = document.getElementById("submit");
+
+
+   document.getElementById("submit").addEventListener("click", (e) => {
+      e.preventDefault();
+      addData();
+    });
+
+   let expense = document.getElementById("expense");
+    let amount = document.getElementById("amount");
+    let category = document.getElementById("category");
+    let date = document.getElementById("date");
+    let table = document.getElementById("table");
+
+    function addData(){
+    let expenseValue = expense.value;
+    let amountValue = amount.value;
+    let categoryValue = category.value;
+    let dateValue = date.value;
+
+     table.insertAdjacentHTML(
+        "beforeend",
+        `
+        <tr >
+            <td>${expenseValue}</td>
+            <td>${amountValue}</td>
+            <td>${categoryValue}</td>
+            <td>${dateValue}</td>
+            <td><button id="delete"> DeleteExpense</button></td>
+            <td><button id="edit"> Edit expesnes</button></td>
+            
+            </tr>
+        `
+
+        
+    );
+        
+     expenseValue="";
+     amountValue="";
+     dateValue ="";
+
+    };
+  function DeleteExpense(event){
+    
+  }
+    
+</script>
+</body>
+</html>
