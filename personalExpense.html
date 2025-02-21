@@ -3,154 +3,232 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personal expenses traker</title>
+    <title>Personal Expense Tracker</title>
     <style>
-    .left{
-    width: 30vw;
-    background-color: rgb(33, 31, 31);
-    height: 100vh;
-}
-.right{
-    width: 70vw;
-}
-.container{
-display: flex;
-flex-direction: row;
-}
-input, select{
-    width: 90%;
-    background-color: white;
-    height: 7%;
-    margin-bottom: 30px;
-    
-}
-
-label{
-    color: white;
-    font-weight: bold;
-    
-}
-
-form{
-    background-color: rgb(62, 61, 61);
-    height: 70%;
-    width: 90%;
-    margin: auto;
-}
-
-button{
-    background-color: green;
-    padding: 7px 10px;
-    margin-top: 10px;
-    border: none;
-    border-radius: 10px;
-    color: white;
-}
-table{
-    margin: auto;
-}
-
-h1{
-    text-align: center;
-}
+        .left {
+            width: 30vw;
+            background-color: rgb(33, 31, 31);
+            height: 100vh;
+            padding: 20px;
+        }
+        .right {
+            width: 70vw;
+            padding: 20px;
+        }
+        .container {
+            display: flex;
+        }
+        input, select {
+            width: 90%;
+            height: 30px;
+            margin-bottom: 10px;
+        }
+        label {
+            color: white;
+            font-weight: bold;
+            display: block;
+        }
+        form {
+            background-color: rgb(62, 61, 61);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        button {
+            background-color: green;
+            padding: 7px 10px;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: center;
+        }
+        h1 {
+            text-align: center;
+        }
+        .filter-container {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .filter-container select {
+            width: 200px;
+            padding: 5px;
+        }
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px gray;
+        }
+        .modal button {
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
-    <main>
-    <h1>Personal expenses Tracker</h1>
-    <div class="container">
-    <div class="left">
-    <form>
-        <label>Expense Description
-            <input type="text" id="expense" placeholder="Enter the expesnes">
-        </label>
-        
-        <label >Enter amount you spent
-            <input type="number" id="amount" placeholder="Enter amount">
-        </label>
-        
-        <label >Choose category of expenses
 
-            <select id="category">
+    <h1>Personal Expense Tracker</h1>
+
+    <!-- Filter Section -->
+    <div class="filter-container">
+        <label for="filterCategory"><strong>Filter by Category:</strong></label>
+        <select id="filterCategory" onchange="filterExpenses()">
+            <option value="All">All</option>
+            <option value="Food">Food</option>
+            <option value="Transport">Transport</option>
+            <option value="Entertainment">Entertainment</option>
+            <option value="Family and friends">Family and friends</option>
+        </select>
+    </div>
+
+    <div class="container">
+        <div class="left">
+            <form id="expenseForm">
+                <label>Expense Description
+                    <input type="text" id="expense" placeholder="Enter the expense">
+                </label>
+                
+                <label>Enter amount you spent
+                    <input type="number" id="amount" placeholder="Enter amount">
+                </label>
+                
+                <label>Choose category of expenses
+                    <select id="category">
+                        <option>Food</option>
+                        <option>Transport</option>
+                        <option>Entertainment</option>
+                        <option>Family and friends</option>
+                    </select>
+                </label>
+                
+                <label>Choose Date
+                    <input type="date" id="date">
+                </label>
+
+                <button id="submit">Add Expense</button>
+            </form>
+        </div>
+
+        <div class="right">
+            <table id="table">
+                <tr>
+                    <th>Expense Description</th>
+                    <th>Amount Spent</th>
+                    <th>Expense Category</th>
+                    <th>Date</th>
+                    <th>Edit Expense</th>
+                    <th>Delete Expense</th>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    
+    <div id="editModal" class="modal">
+        <h3>Edit Expense</h3>
+        <label>Description: <input type="text" id="editExpense"></label>
+        <label>Amount: <input type="number" id="editAmount"></label>
+        <label>Category: 
+            <select id="editCategory">
                 <option>Food</option>
                 <option>Transport</option>
                 <option>Entertainment</option>
                 <option>Family and friends</option>
             </select>
         </label>
-        
-       <label >Choose Date
-        <input type="date" id="date">
-       </label>
+        <label>Date: <input type="date" id="editDate"></label>
+        <button onclick="saveEdit()">Save</button>
+        <button onclick="closeEditModal()">Cancel</button>
+    </div>
 
-       
-        <button id="submit">Add expense</button>
-    </form>
-</div>
+    <script>
+        let table = document.getElementById("table");
+        let submit = document.getElementById("submit");
+        let editingRow = null; 
 
-    <div class="right">
-    <table id="table">
-     <tr>
-        <th>Expense Description</th>
-        <th>amaunt spent</th>
-        <th>expense Category</th>
-        <th>Date</th>
-        <th>Edit expense</th>
-        <th>Delete Expense</th>
-     </tr>
-    </table>
-</div>
-</div>
-</main>
+        document.getElementById("submit").addEventListener("click", (e) => {
+            e.preventDefault();
+            addData();
+        });
 
-<script>
-   
-   let submit = document.getElementById("submit");
+        function addData() {
+            let expenseValue = document.getElementById("expense").value;
+            let amountValue = document.getElementById("amount").value;
+            let categoryValue = document.getElementById("category").value;
+            let dateValue = document.getElementById("date").value;
 
+            if (!expenseValue || !amountValue || !dateValue) {
+                alert("Please fill all fields!");
+                return;
+            }
 
-   document.getElementById("submit").addEventListener("click", (e) => {
-      e.preventDefault();
-      addData();
-    });
+            let newRow = table.insertRow();
+            newRow.innerHTML = `
+                <td>${expenseValue}</td>
+                <td>${amountValue}</td>
+                <td>${categoryValue}</td>
+                <td>${dateValue}</td>
+                <td><button onclick="editExpense(this)">Edit</button></td>
+                <td><button onclick="deleteExpense(this)">Delete</button></td>
+            `;
 
-   let expense = document.getElementById("expense");
-    let amount = document.getElementById("amount");
-    let category = document.getElementById("category");
-    let date = document.getElementById("date");
-    let table = document.getElementById("table");
+            document.getElementById("expenseForm").reset();
+        }
 
-    function addData(){
-    let expenseValue = expense.value;
-    let amountValue = amount.value;
-    let categoryValue = category.value;
-    let dateValue = date.value;
+        function editExpense(button) {
+            editingRow = button.parentElement.parentElement;
+            let cells = editingRow.children;
 
-     table.insertAdjacentHTML(
-        "beforeend",
-        `
-        <tr >
-            <td>${expenseValue}</td>
-            <td>${amountValue}</td>
-            <td>${categoryValue}</td>
-            <td>${dateValue}</td>
-            <td><button id="delete"> DeleteExpense</button></td>
-            <td><button id="edit"> Edit expesnes</button></td>
-            
-            </tr>
-        `
+            document.getElementById("editExpense").value = cells[0].textContent;
+            document.getElementById("editAmount").value = cells[1].textContent;
+            document.getElementById("editCategory").value = cells[2].textContent;
+            document.getElementById("editDate").value = cells[3].textContent;
 
-        
-    );
-        
-     expenseValue="";
-     amountValue="";
-     dateValue ="";
+            document.getElementById("editModal").style.display = "block";
+        }
 
-    };
-  function DeleteExpense(event){
-    
-  }
-    
-</script>
+        function saveEdit() {
+            if (editingRow) {
+                editingRow.cells[0].textContent = document.getElementById("editExpense").value;
+                editingRow.cells[1].textContent = document.getElementById("editAmount").value;
+                editingRow.cells[2].textContent = document.getElementById("editCategory").value;
+                editingRow.cells[3].textContent = document.getElementById("editDate").value;
+            }
+            closeEditModal();
+        }
+
+        function closeEditModal() {
+            document.getElementById("editModal").style.display = "none";
+        }
+
+        function deleteExpense(button) {
+            button.parentElement.parentElement.remove();
+        }
+
+        function filterExpenses() {
+            let selectedCategory = document.getElementById("filterCategory").value;
+            let rows = table.getElementsByTagName("tr");
+
+            for (let i = 1; i < rows.length; i++) {
+                let categoryCell = rows[i].cells[2];
+                rows[i].style.display = (selectedCategory === "All" || categoryCell.textContent === selectedCategory) ? "" : "none";
+            }
+        }
+    </script>
+
 </body>
 </html>

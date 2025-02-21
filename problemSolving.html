@@ -8,6 +8,8 @@
 <body>
     <script>
         function countRoles(users) {
+         
+         
         let userAppearence ={};
         for(let user of users){
         if(userAppearence[user]){
@@ -21,7 +23,7 @@
         }
       
 
-        console.log(countRoles(["admin","user","admin","admin"]));
+        console.log(countRoles([{name:"umutesi",role:"admin"},{name:"uwase",role:"user"},{name:"Kelia",role:"admin"}]));
 
        function findAdmins(users){
         let adminUsers= users.filter(user => user.role="admin");
